@@ -1,0 +1,29 @@
+---
+title: "HW2 Data Wrangling"
+author: "Ronae McLin rkm2147"
+date: "9/21/2020"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+# Problem 2
+
+Read and clean the Mr. Trash Wheel sheet
+
+to omit non-data entries (rows with notes / figures; columns containing notes) 
+
+use reasonable variable names
+
+omit rows that do not include dumpster-specific data
+
+round the number of sports balls to the nearest integer and converts the result to an integer variable (using as.integer)
+
+```{r}
+trash_df = readxl::read_excel("./trash_wheel.xlsx",                    range = "A2:N408")
+```
+
+
