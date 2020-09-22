@@ -10,7 +10,7 @@ library(tidyverse)
 library(readxl)
 ```
 
-# Problem 2
+# Problem 1
 
 Read and clean the Mr. Trash Wheel sheet
 
@@ -35,3 +35,39 @@ trash_df = readxl::read_excel("./trash_wheel.xlsx",                    range = "
 okay, i'm thinking we should tidy up the month, year, date into one category
 
 plastic bottles, polyst, trash bags, etc should go into one category called things collected
+
+
+# Problem 2
+
+Read and clean the data; retain line, station, name, station latitude / longitude, routes served, entry, vending, entrance type, and ADA compliance. Convert the entry variable from character (YES vs NO) to a logical variable (the ifelse or recode function may be useful).
+```{r}
+transit_df = read_csv("./transit.csv") %>% 
+   janitor::clean_names()
+```
+
+
+# Problem 3
+
+
+first we will bring in pols-month.csv
+
+ replace month number with month name; create a president variable taking values gop and dem, and remove prez_dem and prez_gop; and remove the day variable.
+```{r}
+pols_df = read_csv("./538_data/pols-month.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(mon, into = c("year","month","day")) 
+
+
+
+```
+need to convert character into numeric value
+unemployment.csv
+```{r}
+
+```
+
+snp.csv
+```{r}
+
+```
+
