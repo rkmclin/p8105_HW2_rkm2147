@@ -57,8 +57,18 @@ month_df =
 rain_df = bind_rows(rain_2017, rain_2018)
 
 rain_df =
-	left_join(rain_df, month_df, by = "month") %>% 
+	left_join(rain_df, month_df, by = "month") 
+  
 ```
+
+
+The trash data frame contains information about the Mr.Trash Wheel trash collector that is located in Baltimore, Maryland. 
+There is a total of `r nrow(trash_df)` rows in the data frame. The total amount of glass bottles collected by Mr. Trash Wheel so far is `r trash_df %>% pull(glass_bottles) %>% sum()` and the total amount of plastic bottles so far is `r trash_df %>% pull(plastic_bottles) %>% sum()`. 
+he median number of sports balls in 2017 was `r trash_df %>% filter(year == 2017) %>% pull(sports_balls) %>% median()`.
+
+There is a total of `r nrow(rain_df)` rows in the data frame.
+The total amount of precipitation in 2018 was `r rain_df %>% filter(year == 2018) %>% pull(total) %>% sum()` inches.
+
 
 # Problem 2
 
