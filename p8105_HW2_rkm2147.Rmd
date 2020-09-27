@@ -45,6 +45,20 @@ rain_2017 = readxl::read_excel("./trash_wheel.xlsx",                    sheet = 
         relocate(year)
 ```
 
+Changing the variable of year into a complete month name and then combining 2017 and 2018 into one table. 
+
+```{r}
+month_df = 
+	tibble(
+		month = 1:12,
+		month_name = month.name
+	)
+
+rain_df = bind_rows(rain_2017, rain_2018)
+
+rain_df =
+	left_join(rain_df, month_df, by = "month") %>% 
+```
 
 # Problem 2
 
