@@ -72,11 +72,30 @@ The total amount of precipitation in 2018 was `r rain_df %>% filter(year == 2018
 
 # Problem 2
 
-Read and clean the data; retain line, station, name, station latitude / longitude, routes served, entry, vending, entrance type, and ADA compliance. Convert the entry variable from character (YES vs NO) to a logical variable (the ifelse or recode function may be useful).
+
+
+ Convert the entry variable from character (YES vs NO) to a logical variable (the ifelse or recode function may be useful).
+
+Write a short paragraph about this dataset – explain briefly what variables the dataset contains, describe your data cleaning steps so far, and give the dimension (rows x columns) of the resulting dataset. Are these data tidy?
+
+Answer the following questions using these data:
+
+How many distinct stations are there? Note that stations are identified both by name and by line (e.g. 125th St A/B/C/D; 125st 1; 125st 4/5); the distinct function may be useful here.
+How many stations are ADA compliant?
+What proportion of station entrances / exits without vending allow entrance?
+Reformat data so that route number and route name are distinct variables. How many distinct stations serve the A train? Of the stations that serve the A train, how many are ADA compliant?
+
+
 
 ```{r}
-transit_df = read_csv("./transit.csv") %>% 
-   janitor::clean_names()
+transit_df = read_csv("./transit.csv") %>% janitor::clean_names() %>% 
+  select(line, station_name,station_latitude, station_longitude,route1:route11, entry, vending,       entrance_type, ada) %>% 
+  mutate(
+     recode(entry, YES = "TRUE", NO = "FALSE"))
+    
+    
+  
+  
 ```
 
 
