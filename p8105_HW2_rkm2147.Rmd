@@ -127,20 +127,30 @@ pols_df =
     president = prez_gop + prez_dem)  
 
 select(pols_df, year, gov_gop, sen_gop, rep_gop, gov_dem, rep_dem, sen_dem, month_name, president) %>% 
-  relocate(month_name)
+  relocate(year,month_name)
 
 ```
 
-
-
-
-need to convert character into numeric value
-unemployment.csv
-```{r}
-
-```
-
+We will be cleaning the next dataset using a similar process
 snp.csv
+```{r}
+snp_df = read_csv("./538_data/snp.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("month","day","year"))
+
+snpmonth_df = 
+	tibble(
+		month = c("1","2","3","4","5","6","7","8","9","10","11","12"),
+		month_name = month.name
+	)
+
+snp_df =
+	left_join(snp_df, snpmonth_df, by = "month") %>% 
+  select(year, close, month_name) %>% 
+  relocate(year, month_name)
+```
+
+snp.csv unemployment.csv
 ```{r}
 
 ```
