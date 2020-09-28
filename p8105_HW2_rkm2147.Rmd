@@ -123,14 +123,14 @@ polsmonth_df =
 
 pols_df =
 	left_join(pols_df, polsmonth_df, by = "month") %>% 
-relocate(prez_gop,prez_dem) %>% 
-  pivot_longer(
-    prez_gop:prez_dem,
-    names_to = "president",
-    values_to = "amount"
-  )
+  mutate(
+    president = prez_gop + prez_dem)  
+
+select(pols_df, year, gov_gop, sen_gop, rep_gop, gov_dem, rep_dem, sen_dem, month_name, president) %>% 
+  relocate(month_name)
 
 ```
+
 
 
 
