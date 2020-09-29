@@ -103,7 +103,7 @@ transit_df = read_csv("./transit.csv") %>% janitor::clean_names() %>%
 summary(transit_df)
 ```
 
-The transit dataset contains a total of `r nrow(transit_df)` variables.  More specifically the variables:`r names(transit_df)`. In my opinion this data is not very tidy!  Cleaning of the data so far consisted of dropping tangential variables, cleaning up variable names using the janitor tool, and changing entry into a logical variable. I also used the pivot tool to condense the routes listed.  The size of the resulting data set is `r nrow(transit_df)` by `r ncol(transit_df)`. 
+The transit dataset contains a total of `r nrow(transit_df)` variables.  More specifically the variables:`r names(transit_df)`. In my opinion this data is not very tidy!  Cleaning of the data so far consisted of dropping tangential variables, cleaning up variable names using the janitor tool, and changing entry into a logical variable. I also used the pivot tool to condense the routes listed.  The size of the resulting data set is `r nrow(transit_df)` rows by `r ncol(transit_df)` columns. 
 
 - There are `r count(distinct(transit_df, line, station_name))` distinct stations within the NYC transit. 
 
