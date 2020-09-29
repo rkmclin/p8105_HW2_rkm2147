@@ -124,10 +124,10 @@ polsmonth_df =
 pols_df =
 	left_join(pols_df, polsmonth_df, by = "month") %>% 
   mutate(
-    president = prez_gop + prez_dem)  
+    president = prez_gop + prez_dem) %>% 
 
-select(pols_df, year, gov_gop, sen_gop, rep_gop, gov_dem, rep_dem, sen_dem, month_name, president) %>% 
-  relocate(year,month_name)
+select(year, gov_gop, sen_gop, rep_gop, gov_dem, rep_dem, sen_dem, month_name, president) %>% 
+  relocate(year, month_name)
 
 ```
 
@@ -150,8 +150,34 @@ snp_df =
   relocate(year, month_name)
 ```
 
-snp.csv unemployment.csv
+ unemployment.csv
 ```{r}
+unemployment_df = read_csv("./538_data/unemployment.csv") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    jan:dec,
+    names_to = "month",
+    values_to = "percentage"
+  )
+
+unmonth_df =
+  tibble(
+    month = c("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"),
+    month_name = month.name
+    
+  )
+unemployment_df =
+	left_join(unemployment_df, unmonth_df, by = "month") %>% 
+  select(year, month_name, percentage)
+```
+
+Need to merge the three resulting datasets into one using month and year.
+
+```{r}
+
+final538_df = bind_rows(pols_df, snp_df)
+
+final538_df = left_join(final538_df, unemployment_df, by = "month_name")
 
 ```
 
