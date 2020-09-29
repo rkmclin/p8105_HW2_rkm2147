@@ -69,38 +69,46 @@ summary(trash_df)
 ```
 
 The trash data frame contains information about the Mr.Trash Wheel trash collector that is located in Baltimore, Maryland. There is a total of `r nrow(trash_df)` rows in the data frame. The total amount of glass bottles collected by Mr. Trash Wheel so far is `r trash_df %>% pull(glass_bottles) %>% sum()` and the total amount of plastic bottles so far is `r trash_df %>% pull(plastic_bottles) %>% sum()`. 
-he median number of sports balls in 2017 was `r trash_df %>% filter(year == 2017) %>% pull(sports_balls) %>% median()`.
-
-There is a total of `r nrow(rain_df)` rows in the data frame.
-The total amount of precipitation in 2018 was `r rain_df %>% filter(year == 2018) %>% pull(total) %>% sum()` inches.
+The median number of sports balls in 2017 was `r trash_df %>% filter(year == 2017) %>% pull(sports_balls) %>% median()`. There is a total of `r nrow(rain_df)` rows in the data frame. The total amount of precipitation in 2018 was `r rain_df %>% filter(year == 2018) %>% pull(total) %>% sum()` inches.
 
 
 # Problem 2
 
-
-
- Convert the entry variable from character (YES vs NO) to a logical variable (the ifelse or recode function may be useful).
-
-Write a short paragraph about this dataset – explain briefly what variables the dataset contains, describe your data cleaning steps so far, and give the dimension (rows x columns) of the resulting dataset. Are these data tidy?
-
-Answer the following questions using these data:
-
-How many distinct stations are there? Note that stations are identified both by name and by line (e.g. 125th St A/B/C/D; 125st 1; 125st 4/5); the distinct function may be useful here.
-How many stations are ADA compliant?
-What proportion of station entrances / exits without vending allow entrance?
-Reformat data so that route number and route name are distinct variables. How many distinct stations serve the A train? Of the stations that serve the A train, how many are ADA compliant?
-
-
+NYC Transit Data!
 
 ```{r}
 transit_df = read_csv("./transit.csv") %>% janitor::clean_names() %>% 
-  select(line, station_name,station_latitude, station_longitude,route1:route11, entry, vending,       entrance_type, ada) %>% 
-  mutate(entry, YES = "TRUE", NO = "FALSE")
-    
-    
+  select(line, station_name,
+         station_latitude,
+         station_longitude,
+         route1:route11,
+         entry,vending,
+         entrance_type, ada) %>% 
   
+  mutate(entry = recode(entry, "YES" = "TRUE", "NO" = "FALSE")) %>% 
   
+  mutate(route8 = as.character(route8)) %>% 
+  mutate(route9 = as.character(route9)) %>% 
+  mutate(route10 = as.character(route10)) %>% 
+  mutate(route11 = as.character(route11)) %>% 
+   
+  pivot_longer(
+    route1:route11,
+    names_to = "route_name",
+    values_to = "route_number"
+  )
+    
 ```
+
+```{r}
+summary(transit_df)
+```
+
+The transit dataset contains a total of `r nrow(transit_df)` variables.  More specifically the variables:`r names(transit_df)`.  In additions to the route numbers, entry and entrance type, vending, and ADA. Cleaning of the data so far consisted of dropping tangential variables, cleaning up variable names using the janitor tool, and changing entry into a logical variable. The size of the resulting data set is `r nrow(transit_df)` by `r ncol(transit_df)`. 
+
+There are `r count(distinct(transit_df, line, station_name))` distinct stations within the NYC transit. There are a total of `r filter(transit_df,ada == "TRUE") %>% distinct(line, station_name) %>% count ()` distinct stations that are ADA compliant. 
+
+There are a total of `r filter(transit_df,route_number == "A") %>% distinct(line, station_name) %>% count ()` distinct stations that serve the A train. The proportion of station entrances / exits without vending that allow entrance is `r filter(transit_df,vending == "NO") %>%count()/filter(transit_df,entry == "TRUE") %>%count()`. There are a total of `r filter(transit_df,route_number == "A") %>% filter(ada == "TRUE") %>% distinct(line, station_name) %>% count ()` distinct stations that serve the A train that are ADA compliant. 
 
 
 # Problem 3
