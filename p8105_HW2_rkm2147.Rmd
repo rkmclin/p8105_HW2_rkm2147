@@ -123,7 +123,11 @@ polsmonth_df =
 pols_df =
 	left_join(pols_df, polsmonth_df, by = "month") %>% 
   mutate(
-    president = prez_gop + prez_dem) %>% 
+    president = case_when(
+      prez_gop == 1 ~ "gop",
+      prez_dem == 1 ~ "dem",
+      prez_gop == 2 ~ "gop",
+      )) %>% 
 
 select(year, gov_gop, sen_gop, rep_gop, gov_dem, rep_dem, sen_dem, month_name, president) %>% 
   relocate(year, month_name)
@@ -174,13 +178,10 @@ Need to merge the three resulting datasets into one using month and year.
 
 ```{r}
 
-final538_df = bind_rows(pols_df, snp_df)
-
 final538_df = left_join(pols_df, snp_df, by = c("year","month_name")) %>% 
   mutate(year = as.integer(year))
 
 final538_df = left_join(final538_df, unemployment_df, by = c("year","month_name"))
 
-
 ```
-need to change the year variable to numeric in final538 before joini
+
