@@ -14,7 +14,7 @@ library(readxl)
 
  Mr. Trash Wheel data
 
-- We will be importing the data, and then follow up by cleaning it.
+ We will be importing the data, and then follow up by cleaning it.
 
 ```{r}
 trash_df = readxl::read_excel("./trash_wheel.xlsx",                    range = "A2:N408") %>% 
@@ -63,9 +63,12 @@ rain_df =
   
 ```
 
+Summary of Mr. Trash Wheel
+```{r}
+summary(trash_df)
+```
 
-The trash data frame contains information about the Mr.Trash Wheel trash collector that is located in Baltimore, Maryland. 
-There is a total of `r nrow(trash_df)` rows in the data frame. The total amount of glass bottles collected by Mr. Trash Wheel so far is `r trash_df %>% pull(glass_bottles) %>% sum()` and the total amount of plastic bottles so far is `r trash_df %>% pull(plastic_bottles) %>% sum()`. 
+The trash data frame contains information about the Mr.Trash Wheel trash collector that is located in Baltimore, Maryland. There is a total of `r nrow(trash_df)` rows in the data frame. The total amount of glass bottles collected by Mr. Trash Wheel so far is `r trash_df %>% pull(glass_bottles) %>% sum()` and the total amount of plastic bottles so far is `r trash_df %>% pull(plastic_bottles) %>% sum()`. 
 he median number of sports balls in 2017 was `r trash_df %>% filter(year == 2017) %>% pull(sports_balls) %>% median()`.
 
 There is a total of `r nrow(rain_df)` rows in the data frame.
@@ -103,17 +106,15 @@ transit_df = read_csv("./transit.csv") %>% janitor::clean_names() %>%
 # Problem 3
 
 
+Creating a Final 538 dataset from three sources of information!
 
+ Importing and tidying of pols data
 
- replace month number with month name; create a president variable taking values gop and dem, and remove prez_dem and prez_gop; and remove the day variable.
-```{r}
+```{r pols}
 pols_df = read_csv("./538_data/pols-month.csv") %>% 
   janitor::clean_names() %>% 
   separate(mon, into = c("year","month","day"))
 
-```
-
-```{r}
 polsmonth_df = 
 	tibble(
 		month = c("01","02","03","04","05","06","07","08","09","10","11","12"),
@@ -134,9 +135,8 @@ select(year, gov_gop, sen_gop, rep_gop, gov_dem, rep_dem, sen_dem, month_name, p
 
 ```
 
-We will be cleaning the next dataset using a similar process
-snp.csv
-```{r}
+Importing and tidying of the snp data
+```{r snp}
 snp_df = read_csv("./538_data/snp.csv") %>% 
   janitor::clean_names() %>% 
   separate(date, into = c("month","day","year"))
@@ -153,8 +153,8 @@ snp_df =
   relocate(year, month_name)
 ```
 
- unemployment.csv
-```{r}
+Importing and tidying of the unemployment data
+```{r unemployment}
 unemployment_df = read_csv("./538_data/unemployment.csv") %>% 
   janitor::clean_names() %>% 
   pivot_longer(
@@ -167,8 +167,8 @@ unmonth_df =
   tibble(
     month = c("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"),
     month_name = month.name
-    
-  )
+    )
+
 unemployment_df =
 	left_join(unemployment_df, unmonth_df, by = "month") %>% 
   select(year, month_name, percentage)
@@ -185,3 +185,9 @@ final538_df = left_join(final538_df, unemployment_df, by = c("year","month_name"
 
 ```
 
+Final 538 data
+```{r final538}
+summary(final538_df)
+```
+
+The Final 538 dataset combines three data frames containing information regarding unemployment percentages, national politicians who are democratic or republican, and the closing values of the S&P stock index. There are a total of `r nrow(final538_df)` rows and `r ncol(final538_df)` variables within this set, with notable variables including "year", "president", "close", and "percentage".  The information spans between the years `r final538_df %>% pull(year) %>% range()`.  In the year 2001 the average unemployment percentage was `r final538_df %>% filter(year == 2001) %>% pull(percentage) %>% mean()`. Interestingly so, in the year of 1974, there were 2 `r final538_df %>% filter(year == 1974) %>% pull(president) %>% max()` presidents. The most recent mean of the closing values for the S&P stock index was `r final538_df %>% filter(year == 2015) %>% pull(close) %>% mean()`.
