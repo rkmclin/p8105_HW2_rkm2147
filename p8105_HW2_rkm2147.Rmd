@@ -92,8 +92,7 @@ Reformat data so that route number and route name are distinct variables. How ma
 ```{r}
 transit_df = read_csv("./transit.csv") %>% janitor::clean_names() %>% 
   select(line, station_name,station_latitude, station_longitude,route1:route11, entry, vending,       entrance_type, ada) %>% 
-  mutate(
-     recode(entry, YES = "TRUE", NO = "FALSE"))
+  mutate(entry, YES = "TRUE", NO = "FALSE")
     
     
   
@@ -177,10 +176,11 @@ Need to merge the three resulting datasets into one using month and year.
 
 final538_df = bind_rows(pols_df, snp_df)
 
-final538_df = left_join(pols_df, snp_df, by = "month_name")
+final538_df = left_join(pols_df, snp_df, by = c("year","month_name")) %>% 
+  mutate(year = as.integer(year))
 
-final538_df = left_join(final538_df, unemployment_df, by = "month_name")
+final538_df = left_join(final538_df, unemployment_df, by = c("year","month_name"))
 
 
 ```
-
+need to change the year variable to numeric in final538 before joini
