@@ -177,7 +177,10 @@ Need to merge the three resulting datasets into one using month and year.
 
 final538_df = bind_rows(pols_df, snp_df)
 
+final538_df = left_join(pols_df, snp_df, by = "month_name")
+
 final538_df = left_join(final538_df, unemployment_df, by = "month_name")
+
 
 ```
 
