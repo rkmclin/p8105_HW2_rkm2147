@@ -14,7 +14,7 @@ library(readxl)
 
  Mr. Trash Wheel data
 
- We will be importing the data, and then follow up by cleaning it.
+We will be importing the data, and then follow up by cleaning it.
 
 ```{r}
 trash_df = readxl::read_excel("./trash_wheel.xlsx",                    range = "A2:N408") %>% 
@@ -45,7 +45,7 @@ rain_2017 = readxl::read_excel("./trash_wheel.xlsx",                    sheet = 
         relocate(year)
 ```
 
-Changing the variable of year into a complete month name and then combining 2017 and 2018 into one table. 
+Next up, changing the variable of month into a complete month name and then combining 2017 and 2018 into one table. 
 
 ```{r}
 month_df = 
@@ -68,8 +68,7 @@ Summary of Mr. Trash Wheel
 summary(trash_df)
 ```
 
-The trash data frame contains information about the Mr.Trash Wheel trash collector that is located in Baltimore, Maryland. There is a total of `r nrow(trash_df)` rows in the data frame. The total amount of glass bottles collected by Mr. Trash Wheel so far is `r trash_df %>% pull(glass_bottles) %>% sum()` and the total amount of plastic bottles so far is `r trash_df %>% pull(plastic_bottles) %>% sum()`. 
-The median number of sports balls in 2017 was `r trash_df %>% filter(year == 2017) %>% pull(sports_balls) %>% median()`. There is a total of `r nrow(rain_df)` rows in the data frame. The total amount of precipitation in 2018 was `r rain_df %>% filter(year == 2018) %>% pull(total) %>% sum()` inches.
+The trash data frame contains information about the Mr.Trash Wheel trash collector that is located in Baltimore, Maryland. The size of the data frame is `r nrow(trash_df)` rows by `r ncol(trash_df)` columns. The total amount of glass bottles collected by Mr. Trash Wheel so far is `r trash_df %>% pull(glass_bottles) %>% sum()` and the total amount of plastic bottles so far is `r trash_df %>% pull(plastic_bottles) %>% sum()`. The median number of sports balls in 2017 was `r trash_df %>% filter(year == 2017) %>% pull(sports_balls) %>% median()`. The size of the rain data frame is `r nrow(rain_df)` rows by `r ncol(rain_df)` columns. The total amount of precipitation in 2018 was `r rain_df %>% filter(year == 2018) %>% pull(total) %>% sum()` inches.
 
 
 # Problem 2
@@ -104,11 +103,18 @@ transit_df = read_csv("./transit.csv") %>% janitor::clean_names() %>%
 summary(transit_df)
 ```
 
-The transit dataset contains a total of `r nrow(transit_df)` variables.  More specifically the variables:`r names(transit_df)`.  In additions to the route numbers, entry and entrance type, vending, and ADA. Cleaning of the data so far consisted of dropping tangential variables, cleaning up variable names using the janitor tool, and changing entry into a logical variable. The size of the resulting data set is `r nrow(transit_df)` by `r ncol(transit_df)`. 
+The transit dataset contains a total of `r nrow(transit_df)` variables.  More specifically the variables:`r names(transit_df)`. In my opinion this data is not very tidy!  Cleaning of the data so far consisted of dropping tangential variables, cleaning up variable names using the janitor tool, and changing entry into a logical variable. I also used the pivot tool to condense the routes listed.  The size of the resulting data set is `r nrow(transit_df)` by `r ncol(transit_df)`. 
 
-There are `r count(distinct(transit_df, line, station_name))` distinct stations within the NYC transit. There are a total of `r filter(transit_df,ada == "TRUE") %>% distinct(line, station_name) %>% count ()` distinct stations that are ADA compliant. 
+- There are `r count(distinct(transit_df, line, station_name))` distinct stations within the NYC transit. 
 
-There are a total of `r filter(transit_df,route_number == "A") %>% distinct(line, station_name) %>% count ()` distinct stations that serve the A train. The proportion of station entrances / exits without vending that allow entrance is `r filter(transit_df,vending == "NO") %>%count()/filter(transit_df,entry == "TRUE") %>%count()`. There are a total of `r filter(transit_df,route_number == "A") %>% filter(ada == "TRUE") %>% distinct(line, station_name) %>% count ()` distinct stations that serve the A train that are ADA compliant. 
+- There are a total of `r filter(transit_df,ada == "TRUE") %>% distinct(line, station_name) %>% count ()` distinct stations that are ADA compliant. 
+
+- There are a total of `r filter(transit_df,route_number == "A") %>% distinct(line, station_name) %>% count ()` distinct stations that serve the A train. 
+
+- The proportion of station entrances / exits without vending that allow entrance is `r filter(transit_df,vending == "NO") %>%count()/filter(transit_df,entry == "TRUE") %>%count()`.
+
+- There are a total of `r filter(transit_df,route_number == "A") %>% filter(ada == "TRUE") %>% distinct(line, station_name) %>% count ()` distinct stations that serve the A train that are ADA compliant. 
+
 
 
 # Problem 3
@@ -198,4 +204,4 @@ Final 538 data
 summary(final538_df)
 ```
 
-The Final 538 dataset combines three data frames containing information regarding unemployment percentages, national politicians who are democratic or republican, and the closing values of the S&P stock index. There are a total of `r nrow(final538_df)` rows and `r ncol(final538_df)` variables within this set, with notable variables including "year", "president", "close", and "percentage".  The information spans between the years `r final538_df %>% pull(year) %>% range()`.  In the year 2001 the average unemployment percentage was `r final538_df %>% filter(year == 2001) %>% pull(percentage) %>% mean()`. Interestingly so, in the year of 1974, there were 2 `r final538_df %>% filter(year == 1974) %>% pull(president) %>% max()` presidents. The most recent mean of the closing values for the S&P stock index was `r final538_df %>% filter(year == 2015) %>% pull(close) %>% mean()`.
+The Final 538 dataset combines three data frames containing information regarding unemployment percentages, national politicians who are democratic or republican, and the closing values of the S&P stock index. The resulting size of this frame is `r nrow(final538_df)` rows x `r ncol(final538_df)` columns. Variables within this set include: `r names(final538_df)`. Notable variables including "year", "president", "close", and "percentage".  The information spans between the years `r final538_df %>% pull(year) %>% range()`.  Fun fact, in the year 2001 the average unemployment percentage was `r final538_df %>% filter(year == 2001) %>% pull(percentage) %>% mean()`. Interestingly so, in the year of 1974, there were 2 `r final538_df %>% filter(year == 1974) %>% pull(president) %>% max()` presidents. The most recent mean of the closing values for the S&P stock index was `r final538_df %>% filter(year == 2015) %>% pull(close) %>% mean()`.
