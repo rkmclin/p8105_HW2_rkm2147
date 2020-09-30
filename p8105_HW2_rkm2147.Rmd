@@ -111,7 +111,7 @@ The transit dataset contains a total of `r nrow(transit_df)` variables.  More sp
 
 - There are a total of `r filter(transit_df,route_number == "A") %>% distinct(line, station_name) %>% count ()` distinct stations that serve the A train. 
 
-- The proportion of station entrances / exits without vending that allow entrance is `r filter(transit_df,vending == "NO") %>%count()/filter(transit_df,entry == "TRUE") %>%count()`.
+- The proportion of station entrances / exits without vending that allow entrance is `r filter(transit_df,vending == "NO",entry == "TRUE") %>% count()/filter(transit_df,vending == "NO") %>%count()`.
 
 - There are a total of `r filter(transit_df,route_number == "A") %>% filter(ada == "TRUE") %>% distinct(line, station_name) %>% count ()` distinct stations that serve the A train that are ADA compliant. 
 
